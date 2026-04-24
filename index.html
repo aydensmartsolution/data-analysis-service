@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Analysis Service — Ayden Smart Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1628;
+    --gold: #C9963A;
+    --gold-light: #E8B96A;
+    --gold-pale: #FBF3E4;
+    --cream: #FDFAF5;
+    --white: #FFFFFF;
+    --text-dark: #0B1628;
+    --text-mid: #3D4F6B;
+    --text-muted: #6B7FA3;
+    --border: rgba(201,150,58,0.2);
+    --shadow: 0 4px 32px rgba(11,22,40,0.10);
+    --shadow-gold: 0 8px 40px rgba(201,150,58,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.7; overflow-x: hidden; }
+  h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.25; }
+
+  /* NAV */
+  .sticky-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(11,22,40,0.96); backdrop-filter: blur(14px);
+    padding: 13px 32px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(201,150,58,0.2);
+  }
+  .nav-brand { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 15px; }
+  .nav-cta {
+    background: var(--gold); color: var(--navy); font-weight: 600; font-size: 13px;
+    padding: 9px 20px; border-radius: 6px; text-decoration: none;
+    display: flex; align-items: center; gap: 6px; transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* SHARED */
+  section { padding: 80px 24px; }
+  .container { max-width: 680px; margin: 0 auto; text-align: center; }
+  .section-tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    letter-spacing: 1.6px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  }
+  .section-title { font-size: clamp(26px, 4vw, 40px); color: var(--text-dark); margin-bottom: 14px; }
+  .section-sub { font-size: 16px; color: var(--text-muted); font-weight: 300; max-width: 580px; margin: 0 auto 44px; line-height: 1.85; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--gold); color: var(--navy); font-weight: 600; font-size: 15px;
+    padding: 15px 32px; border-radius: 8px; text-decoration: none;
+    transition: all 0.2s; box-shadow: var(--shadow-gold);
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  /* HERO */
+  .hero {
+    background: var(--navy); padding: 130px 24px 90px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(201,150,58,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--cream));
+  }
+  .hero-inner { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,150,58,0.12); border: 1px solid rgba(201,150,58,0.3);
+    color: var(--gold-light); font-size: 11px; font-weight: 600;
+    letter-spacing: 1.3px; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 100px; margin-bottom: 30px;
+  }
+  .hero h1 { font-size: clamp(34px, 5.5vw, 58px); color: var(--white); margin-bottom: 22px; font-weight: 900; }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { color: rgba(255,255,255,0.65); font-size: 17px; font-weight: 300; margin-bottom: 38px; line-height: 1.85; max-width: 580px; margin-left: auto; margin-right: auto; }
+  .hero-trust {
+    display: flex; justify-content: center; gap: 36px; flex-wrap: wrap;
+    margin-top: 44px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .trust-stat strong { display: block; font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold-light); }
+  .trust-stat span { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.6px; }
+
+  /* PROBLEM */
+  .problem-section { background: var(--navy); }
+  .problem-section .section-title { color: white; }
+  .problem-section .section-sub { color: rgba(255,255,255,0.5); }
+  .pain-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; text-align: left; margin-bottom: 28px; }
+  .pain-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(201,150,58,0.15);
+    border-radius: 12px; padding: 24px 20px; transition: border-color 0.3s, background 0.3s;
+  }
+  .pain-card:hover { border-color: rgba(201,150,58,0.4); background: rgba(255,255,255,0.06); }
+  .pain-emoji { font-size: 26px; margin-bottom: 12px; display: block; }
+  .pain-card h4 { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--gold-light); margin-bottom: 8px; }
+  .pain-card p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+  .problem-outro {
+    padding: 22px 26px; background: rgba(201,150,58,0.08);
+    border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; text-align: left;
+  }
+  .problem-outro p { font-family: 'Playfair Display', serif; font-size: 17px; color: rgba(255,255,255,0.85); font-style: italic; }
+  .problem-outro span { display: block; font-family: 'DM Sans', sans-serif; font-style: normal; font-size: 13px; color: var(--gold); margin-top: 8px; font-weight: 500; }
+
+  /* DREAM */
+  .dream-section { background: var(--gold-pale); }
+  .dream-items { display: flex; flex-direction: column; gap: 12px; text-align: left; margin-bottom: 24px; }
+  .dream-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: white; border-radius: 10px; padding: 18px 20px;
+    box-shadow: 0 2px 14px rgba(11,22,40,0.06);
+  }
+  .check-circle {
+    width: 26px; height: 26px; background: var(--gold); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .check-circle svg { width: 13px; height: 13px; }
+  .dream-item h4 { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 3px; }
+  .dream-item p { font-size: 13px; color: var(--text-muted); }
+  .dream-quote {
+    background: var(--navy); border-radius: 14px; padding: 36px 30px;
+    color: white; position: relative; text-align: left;
+  }
+  .quote-mark { font-family: 'Playfair Display', serif; font-size: 72px; color: var(--gold); line-height: 1; opacity: 0.35; position: absolute; top: 14px; left: 24px; }
+  .dream-quote blockquote { font-family: 'Playfair Display', serif; font-size: 18px; color: white; font-style: italic; line-height: 1.7; margin-top: 28px; }
+  .dream-quote cite { display: block; margin-top: 18px; font-size: 13px; color: var(--gold); font-style: normal; font-weight: 500; }
+
+  /* CREDIBILITY */
+  .cred-section { background: white; }
+  .cred-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .stat-box { background: var(--cream); border: 1px solid var(--border); border-radius: 10px; padding: 20px 12px; text-align: center; }
+  .stat-box strong { display: block; font-family: 'Playfair Display', serif; font-size: 30px; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+  .stat-box span { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .expertise-list { list-style: none; text-align: left; }
+  .expertise-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-mid); padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+  .expertise-list li:last-child { border-bottom: none; }
+  .dot-gold { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+  .software-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+  .software-tag { background: var(--navy); color: var(--gold-light); font-size: 12px; font-weight: 500; padding: 6px 16px; border-radius: 100px; }
+
+  /* OFFER */
+  .offer-section { background: var(--navy); }
+  .offer-section .section-title { color: white; }
+  .offer-section .section-sub { color: rgba(255,255,255,0.5); }
+  .value-stack { display: flex; flex-direction: column; text-align: left; margin-bottom: 32px; }
+  .value-item { display: flex; align-items: flex-start; gap: 16px; padding: 18px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.2s; }
+  .value-item:hover { background: rgba(255,255,255,0.03); border-radius: 8px; }
+  .value-num {
+    width: 32px; height: 32px; background: rgba(201,150,58,0.14); border: 1px solid rgba(201,150,58,0.3);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 13px; color: var(--gold); flex-shrink: 0; font-weight: 700;
+  }
+  .value-content h4 { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .value-content p { font-size: 13px; color: rgba(255,255,255,0.48); }
+  .price-box { background: rgba(201,150,58,0.08); border: 1px solid rgba(201,150,58,0.28); border-radius: 16px; padding: 36px 28px; text-align: center; }
+  .price-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 14px; font-weight: 600; }
+  .price-from { font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 6px; }
+  .price-amount { font-family: 'Playfair Display', serif; font-size: 54px; color: var(--gold-light); line-height: 1; font-weight: 700; }
+  .price-note { font-size: 12px; color: rgba(255,255,255,0.38); margin-top: 10px; margin-bottom: 24px; line-height: 1.7; }
+  .price-sep { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 22px 0; }
+  .guarantee { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* SOCIAL PROOF */
+  .proof-section { background: var(--cream); }
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .review-card { background: white; border-radius: 12px; padding: 22px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.04); text-align: left; }
+  .stars { color: #F4B942; font-size: 13px; letter-spacing: 2px; margin-bottom: 10px; }
+  .review-text { font-size: 13px; color: var(--text-mid); line-height: 1.75; margin-bottom: 14px; font-style: italic; }
+  .reviewer { display: flex; align-items: center; gap: 10px; }
+  .reviewer-avatar { width: 34px; height: 34px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-weight: 700; font-size: 12px; flex-shrink: 0; }
+  .reviewer-name { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .reviewer-desc { font-size: 11px; color: var(--text-muted); }
+  .google-embed-wrapper { background: white; border-radius: 12px; padding: 28px; box-shadow: var(--shadow); text-align: center; }
+  .google-embed-wrapper > p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+
+  /* FAQ */
+  .faq-section { background: white; }
+  .faq-list { max-width: 680px; margin: 0 auto; text-align: left; }
+  .faq-item { border-bottom: 1px solid rgba(0,0,0,0.07); }
+  .faq-question { width: 100%; background: none; border: none; padding: 20px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; text-align: left; gap: 14px; }
+  .faq-question span { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-dark); line-height: 1.45; }
+  .faq-icon { width: 26px; height: 26px; background: var(--gold-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.3s, background 0.2s; color: var(--gold); font-size: 18px; font-weight: 300; line-height: 1; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--gold); color: white; }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .faq-answer.open { max-height: 300px; padding-bottom: 18px; }
+  .faq-answer p { font-size: 14px; color: var(--text-mid); line-height: 1.85; }
+
+  /* FINAL CTA */
+  .cta-section { background: var(--navy); text-align: center; padding: 100px 24px; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,150,58,0.1) 0%, transparent 65%); pointer-events: none; }
+  .cta-inner { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
+  .cta-section h2 { font-size: clamp(28px, 4.5vw, 48px); color: white; margin-bottom: 18px; }
+  .cta-section h2 em { color: var(--gold-light); }
+  .cta-inner p { font-size: 16px; color: rgba(255,255,255,0.55); max-width: 500px; margin: 0 auto 36px; font-weight: 300; line-height: 1.85; }
+  .wa-button { display: inline-flex; align-items: center; gap: 12px; background: #25D366; color: white; font-weight: 600; font-size: 16px; padding: 18px 40px; border-radius: 10px; text-decoration: none; transition: all 0.2s; box-shadow: 0 8px 30px rgba(37,211,102,0.28); position: relative; }
+  .wa-button:hover { background: #1ebe5a; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(37,211,102,0.38); }
+  .wa-button svg { width: 22px; height: 22px; }
+  .cta-reassurance { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.35); }
+
+  /* FOOTER */
+  .footer { background: #07101E; padding: 28px 24px; text-align: center; }
+  .footer p { font-size: 13px; color: rgba(255,255,255,0.28); }
+  .footer a { color: var(--gold); text-decoration: none; }
+
+  /* ANIMATION */
+  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    .sticky-nav { padding: 11px 18px; }
+    section { padding: 60px 18px; }
+    .hero { padding: 110px 18px 70px; }
+    .pain-cards { grid-template-columns: 1fr; }
+    .cred-stats { grid-template-columns: repeat(2, 1fr); }
+    .reviews-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sticky-nav">
+  <div class="nav-brand">Ayden Smart Academy</div>
+  <a href="https://wa.me/60XXXXXXXXX?text=Hi%2C%20saya%20nak%20tanya%20pasal%20Data%20Analysis%20Service" class="nav-cta" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.117 1.528 5.845L0 24l6.335-1.652A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.006-1.368l-.36-.214-3.726.977.994-3.635-.235-.374A9.819 9.819 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+    Consult Percuma
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero fade-up">
+  <div class="hero-inner">
+    <div class="hero-tag">Data Analysis Service</div>
+    <h1>Dah Collect Data,<br>Tapi Masih <em>Tak Tahu<br>Nak Proceed?</em></h1>
+    <p class="hero-sub">Kami bantu PhD students &amp; researchers analyse, interpret, dan write-up data — supaya anda boleh fokus pada thesis, bukan stress dengan SPSS atau SmartPLS.</p>
+    <a href="https://wa.me/60XXXXXXXXX?text=Hi%2C%20saya%20PhD%20student%20dan%20ada%20masalah%20data.%20Boleh%20tolong%3F" class="btn-primary" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.117 1.528 5.845L0 24l6.335-1.652A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.006-1.368l-.36-.214-3.726.977.994-3.635-.235-.374A9.819 9.819 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+      WhatsApp — Consult Percuma
+    </a>
+    <div class="hero-trust">
+      <div class="trust-stat"><strong>200+</strong><span>Klien Dibantu</span></div>
+      <div class="trust-stat"><strong>5★</strong><span>Google Rating</span></div>
+      <div class="trust-stat"><strong>48h</strong><span>Avg Turnaround</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-section fade-up">
+  <div class="container">
+    <span class="section-tag">Situasi Anda Sekarang</span>
+    <h2 class="section-title">Kalau ini macam situasi anda,<br>anda bukan seorang diri.</h2>
+    <p class="section-sub">Ramai PhD student yang bekerja datang kepada kami dalam situasi yang sama — dan semuanya boleh diselesaikan.</p>
+    <div class="pain-cards">
+      <div class="pain-card fade-up">
+        <span class="pain-emoji">😰</span>
+        <h4>"Tak ada masa langsung"</h4>
+        <p>Bekerja full-time, balik rumah dah penat. Weekend ada family. Data analysis rasa macam projek besar yang tak tahu nak mula dari mana.</p>
+      </div>
+      <div class="pain-card fade-up" style="transition-delay:0.1s">
+        <span class="pain-emoji">😤</span>
+        <h4>"Dah buat tapi masih ada problem"</h4>
+        <p>Loading factor tak meet threshold. P-value pelik. Supervisor reject — dan anda pun tak confirm kenapa salah.</p>
+      </div>
+      <div class="pain-card fade-up" style="transition-delay:0.18s">
+        <span class="pain-emoji">😨</span>
+        <h4>"Lepas collect data terus problem"</h4>
+        <p>Sample size kurang, outlier teruk, normality test fail. Rasa macam nak start semula dari scratch.</p>
+      </div>
+    </div>
+    <div class="problem-outro fade-up">
+      <p>"Setiap tahun ada PhD students yang extend matrikulasi — bukan sebab tak pandai, tapi sebab stuck dekat data analysis."</p>
+      <span>Kos extend tu jauh lebih mahal daripada kos hire pakar.</span>
+    </div>
+  </div>
+</section>
+
+<!-- DREAM -->
+<section class="dream-section fade-up">
+  <div class="container">
+    <span class="section-tag">Selepas Kerja Dengan Kami</span>
+    <h2 class="section-title">Bayangkan bila data anda<br>dah selesai &amp; clear.</h2>
+    <p class="section-sub">Ini yang klien kami rasa lepas kerja selesai.</p>
+    <div class="dream-items">
+      <div class="dream-item fade-up">
+        <div class="check-circle"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h4>Chapter 4 siap dengan interpretation yang betul</h4><p>Bukan sekadar paste output — tapi makna setiap result, dalam academic language yang supervisor approve.</p></div>
+      </div>
+      <div class="dream-item fade-up" style="transition-delay:0.08s">
+        <div class="check-circle"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h4>Supervisor stop question pasal methodology</h4><p>Analysis yang robust, output yang clean, justifikasi yang solid — dia approve dengan lebih cepat.</p></div>
+      </div>
+      <div class="dream-item fade-up" style="transition-delay:0.14s">
+        <div class="check-circle"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h4>Masuk viva dengan confident</h4><p>Kerana anda faham data anda — bukan sekadar harap panel tak tanya lebih dalam.</p></div>
+      </div>
+      <div class="dream-item fade-up" style="transition-delay:0.2s">
+        <div class="check-circle"><svg viewBox="0 0 14 14" fill="none"><polyline points="2,7 6,11 12,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><h4>Weekend anda balik untuk keluarga</h4><p>Tak perlu sacrifice cuti berjam-jam depan SPSS. Serahkan kepada kami, fokus pada life anda.</p></div>
+      </div>
+    </div>
+    <div class="dream-quote fade-up">
+      <div class="quote-mark">"</div>
+      <blockquote>Lepas serahkan data analysis dekat Ayden Smart, supervisor saya yang biasanya banyak comment tu — terus approve Chapter 4. Memang berbaloi sangat.</blockquote>
+      <cite>— Dr. Hafizah, UKM &nbsp;·&nbsp; PhD in Management</cite>
+    </div>
+  </div>
+</section>
+
+<!-- CREDIBILITY -->
+<section class="cred-section fade-up">
+  <div class="container">
+    <span class="section-tag">Siapa Kami</span>
+    <h2 class="section-title">Bukan sekadar buat analysis —<br>kami faham dunia PhD.</h2>
+    <p class="section-sub">Team kami ada background akademik dan dah tolong researchers dari pelbagai universiti — UTM, UKM, UM, UPM, UniKL, dan ramai lagi.</p>
+    <div class="cred-stats">
+      <div class="stat-box fade-up"><strong>200+</strong><span>Klien Selesai</span></div>
+      <div class="stat-box fade-up" style="transition-delay:0.08s"><strong>6+</strong><span>Tahun Pengalaman</span></div>
+      <div class="stat-box fade-up" style="transition-delay:0.14s"><strong>15+</strong><span>Bidang Kajian</span></div>
+      <div class="stat-box fade-up" style="transition-delay:0.2s"><strong>5.0</strong><span>Google Rating</span></div>
+    </div>
+    <ul class="expertise-list fade-up">
+      <li><div class="dot-gold"></div>Structural Equation Modelling — SEM (SmartPLS &amp; AMOS)</li>
+      <li><div class="dot-gold"></div>Factor Analysis — EFA &amp; CFA</li>
+      <li><div class="dot-gold"></div>Regression, ANOVA, MANOVA, ANCOVA</li>
+      <li><div class="dot-gold"></div>Thematic Analysis &amp; Content Analysis (Qualitative)</li>
+      <li><div class="dot-gold"></div>Mixed Methods Research</li>
+      <li><div class="dot-gold"></div>Interpretation &amp; Write-up Chapter 4 &amp; 5</li>
+    </ul>
+    <div class="software-list fade-up">
+      <span class="software-tag">SPSS</span>
+      <span class="software-tag">SmartPLS</span>
+      <span class="software-tag">AMOS</span>
+      <span class="software-tag">R Studio</span>
+      <span class="software-tag">STATA</span>
+      <span class="software-tag">NVivo</span>
+      <span class="software-tag">Excel</span>
+      <span class="software-tag">Python</span>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section class="offer-section fade-up" id="offer">
+  <div class="container">
+    <span class="section-tag">Apa Yang Anda Dapat</span>
+    <h2 class="section-title">Bukan sekadar "buat analysis" —<br>ini yang kami deliver.</h2>
+    <p class="section-sub">Setiap projek bermula dengan free consultation untuk kami faham situasi sebenar anda.</p>
+    <div class="value-stack fade-up">
+      <div class="value-item"><div class="value-num">1</div><div class="value-content"><h4>Free Consultation &amp; Diagnosis</h4><p>Kami tanya, kami dengar, kami faham masalah sebenar — baru bagi solution yang tepat.</p></div></div>
+      <div class="value-item"><div class="value-num">2</div><div class="value-content"><h4>Data Cleaning &amp; Preparation</h4><p>Outlier, missing values, normality — semua dihandle sebelum analysis bermula.</p></div></div>
+      <div class="value-item"><div class="value-num">3</div><div class="value-content"><h4>Statistical Analysis (dengan software output)</h4><p>SPSS, SmartPLS, AMOS atau lain-lain mengikut keperluan kajian anda.</p></div></div>
+      <div class="value-item"><div class="value-num">4</div><div class="value-content"><h4>Interpretation &amp; Write-up Chapter 4</h4><p>Result ditulis dalam academic language — siap untuk masuk terus dalam thesis.</p></div></div>
+      <div class="value-item"><div class="value-num">5</div><div class="value-content"><h4>One Round of Revision Included</h4><p>Supervisor ada comment? Kami revise sekali tanpa caj tambahan.</p></div></div>
+      <div class="value-item"><div class="value-num">6</div><div class="value-content"><h4>Q&amp;A Support via WhatsApp</h4><p>Lepas deliver pun kami ada — soalan masa viva prep, kami jawab.</p></div></div>
+    </div>
+    <div class="price-box fade-up">
+      <div class="price-label">Pelaburan Anda</div>
+      <div class="price-from">Bermula dari</div>
+      <div class="price-amount">RM1,000</div>
+      <div class="price-note">Quotation tepat diberikan selepas consultation — bergantung kepada skop dan kompleksiti kajian anda.</div>
+      <hr class="price-sep">
+      <a href="https://wa.me/60XXXXXXXXX?text=Hi%2C%20saya%20nak%20consult%20pasal%20Data%20Analysis%20Service%20dan%20dapatkan%20quotation" class="btn-primary" target="_blank" style="width:100%;justify-content:center;font-size:14px;padding:14px 20px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.117 1.528 5.845L0 24l6.335-1.652A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.006-1.368l-.36-.214-3.726.977.994-3.635-.235-.374A9.819 9.819 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+        WhatsApp &amp; Dapatkan Quotation
+      </a>
+      <hr class="price-sep">
+      <div class="guarantee">🔒 Consultation percuma. Tiada komitmen. Kami diagnose dulu, anda decide kemudian.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof-section fade-up">
+  <div class="container">
+    <span class="section-tag">Apa Kata Klien Kami</span>
+    <h2 class="section-title">Mereka pun pernah dalam situasi yang sama.</h2>
+    <p class="section-sub">Lebih 200 researchers dah percayakan analisis data mereka kepada kami.</p>
+    <div class="reviews-grid">
+      <div class="review-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Tak expect dapat Chapter 4 siap dalam masa 3 hari. Interpretation dia betul-betul academic level. Supervisor terus approve!"</p>
+        <div class="reviewer"><div class="reviewer-avatar">FH</div><div><div class="reviewer-name">Faizul H.</div><div class="reviewer-desc">PhD Candidate, UPM</div></div></div>
+      </div>
+      <div class="review-card fade-up" style="transition-delay:0.1s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"SmartPLS saya ada issue dengan discriminant validity. Diorang fix dalam sehari dan explain kenapa jadi macam tu. Professional sangat."</p>
+        <div class="reviewer"><div class="reviewer-avatar">NR</div><div><div class="reviewer-name">Nurul Rashidah</div><div class="reviewer-desc">PhD in Education, UTM</div></div></div>
+      </div>
+      <div class="review-card fade-up" style="transition-delay:0.18s">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Kerja full time, memang tak sempat buat analysis sendiri. Ayden Smart tolong dari start sampai Chapter 4 siap. Sangat berbaloi."</p>
+        <div class="reviewer"><div class="reviewer-avatar">AM</div><div><div class="reviewer-name">Ahmad Mukhriz</div><div class="reviewer-desc">DBA Student, UniKL</div></div></div>
+      </div>
+    </div>
+    <div class="google-embed-wrapper fade-up">
+      <p>⭐ Baca lebih banyak review sebenar kami di Google</p>
+      <div style="background:var(--cream);border-radius:8px;padding:20px;color:var(--text-muted);font-size:13px;">[ Letakkan Google Review embed code di sini ]</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section fade-up">
+  <div class="container">
+    <span class="section-tag">Soalan Lazim</span>
+    <h2 class="section-title">Anda ada soalan.<br>Kami ada jawapan.</h2>
+    <p class="section-sub" style="margin-bottom:32px;">Kalau masih ada soalan lain, WhatsApp kami terus — kami reply dalam masa 1 jam.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)"><span>Berapa lama proses analysis ambil masa?</span><div class="faq-icon">+</div></button>
+        <div class="faq-answer"><p>Bergantung kepada skop. Analysis standard (SPSS descriptive + inferential) biasanya 2–3 hari bekerja. SEM penuh dengan CFA + path model (SmartPLS/AMOS) boleh ambil 3–5 hari. Timeline confirm selepas consultation dan kami review data anda.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)"><span>Ini bukan plagiat ke? Supervisor akan tahu tak?</span><div class="faq-icon">+</div></button>
+        <div class="faq-answer"><p>Tidak. Data analysis adalah kemahiran teknikal — ramai researcher engage consultant atau statistician untuk bahagian ini, sama seperti dalam industry. Anda tetap pemilik kajian. Kami juga boleh explain semua result supaya anda confident bila ditanya dalam viva.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)"><span>Saya dah buat sendiri tapi ada error. Boleh fix sahaja?</span><div class="faq-icon">+</div></button>
+        <div class="faq-answer"><p>Boleh. Kami ada review dan repair service untuk analysis yang dah ada. Kami check dari semula — data cleaning, model fit, interpretation — dan advise apa yang perlu diperbetulkan.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)"><span>Software apa yang anda guna? Kalau supervisor specify AMOS boleh?</span><div class="faq-icon">+</div></button>
+        <div class="faq-answer"><p>Boleh. Kami versatile — SPSS, SmartPLS, AMOS, R, STATA, NVivo, dan lain-lain. Beritahu kami software yang diperlukan semasa consultation.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)"><span>Macam mana proses pembayaran? Ada installment?</span><div class="faq-icon">+</div></button>
+        <div class="faq-answer"><p>Selepas setuju quotation, kami minta 50% deposit untuk mulakan kerja. Baki 50% lepas kerja siap dan anda satisfied. Kami terima online transfer (Maybank, CIMB, RHB) dan FPX.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)"><span>Kalau tak satisfied, ada revision atau refund?</span><div class="faq-icon">+</div></button>
+        <div class="faq-answer"><p>Semua pakej termasuk 1 round of revision percuma. Kalau masih ada isu, kami selesaikan bersama. Reputasi kami bergantung kepada hasil kerja kami — 200+ klien berpuas hati adalah bukti terbaik.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section fade-up">
+  <div class="cta-inner">
+    <h2>Jangan biarkan data analysis<br><em>block graduation anda.</em></h2>
+    <p>Consult dulu, percuma. Kami diagnose situasi, explain solution, dan bagi quotation — tanpa pressure, tanpa commitment.</p>
+    <a href="https://wa.me/60XXXXXXXXX?text=Hi%2C%20saya%20PhD%20student%20dan%20ada%20masalah%20dengan%20data%20analysis%20saya.%20Boleh%20advise%3F" class="wa-button" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.556 4.117 1.528 5.845L0 24l6.335-1.652A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.006-1.368l-.36-.214-3.726.977.994-3.635-.235-.374A9.819 9.819 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818 5.419 0 9.818 4.4 9.818 9.818 0 5.419-4.399 9.818-9.818 9.818z"/></svg>
+      WhatsApp Kami Sekarang — Percuma
+    </a>
+    <p class="cta-reassurance">Tiada obligation. Tiada hard sell. Just a conversation.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© 2025 <a href="#">Ayden Smart Academy</a> · Data Analysis Service · All rights reserved.</p>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.faq-answer').classList.remove('open');
+    });
+    if (!isOpen) { item.classList.add('open'); answer.classList.add('open'); }
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
